@@ -45,8 +45,22 @@ function resetGame() {
 // ページロード時にGoogle Mapsの初期化
 document.addEventListener("DOMContentLoaded", async () => {
   // サーバーサイドAPIから地図の初期データを取得する
-  const response = await fetch('/api/myapi');
-  const data = await response.json();
-  console.log(data.message); // "API response from server" が表示されるはず
-  initMap();
+  try {
+    const response = await fetch('/api/myapi?address=Tokyo'); // 例として"Tokyo"を指定
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(data.message); // "API response from server" が表示されるはず
+
+    // Google Mapsのスクリプトが読み込まれてからinitMapを呼び出す
+    if (typeof google !== 'undefined') {
+      initMap();
+    } else {
+      console.error("Google Maps APIが読み込まれていません。");
+    }
+  } catch (error) {
+    console.error("APIリクエスト中にエラーが発生しました:", error);
+  }
 });
