@@ -12,7 +12,34 @@
   <p id="score">スコア: -</p>
   <button onclick="resetGame()">もう一度</button>
 
-  <script src="script.js"></script>
-  <!-- Google Maps APIの読み込みはサーバーサイドで処理される -->
+  <script>
+    // APIキーをサーバーから取得し、Google Maps APIを動的にロード
+    async function loadGoogleMaps() {
+      try {
+        const response = await fetch('/api/myapi');
+        const data = await response.json();
+        
+        if (data.apiKey) {
+          // APIキーを使ってGoogle Mapsスクリプトを動的に追加
+          const script = document.createElement("script");
+          script.src = `https://maps.googleapis.com/maps/api/js?key=${data.apiKey}&libraries=geometry&callback=initMap`;
+          script.async = true;
+          script.defer = true;
+          document.head.appendChild(script);
+        } else {
+          console.error("Error: API key is missing");
+          document.getElementById("score").textContent = "APIキーが取得できませんでした";
+        }
+      } catch (error) {
+        console.error("APIリクエスト中にエラーが発生しました:", error);
+        document.getElementById("score").textContent = "APIリクエスト中にエラーが発生しました";
+      }
+    }
+
+    // 初期化関数を非同期に呼び出し
+    loadGoogleMaps();
+  </script>
+
+  <script src="script.js"></script> <!-- initMap()を定義している場合に呼び出し -->
 </body>
 </html>
