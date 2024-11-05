@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+// api/myapi.js
 
 export default async function handler(req, res) {
     const API_KEY = process.env.GOOGLE_MAPS_API_KEY;  // Vercelの環境変数からAPIキーを取得
