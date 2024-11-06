@@ -17,7 +17,7 @@ export default async function handler(req, res) {
         const response = await fetch(geocodeUrl);
 
         if (!response.ok) {
-            return res.status(response.status).json({ error: 'Failed to fetch from Google Maps API' });
+            return res.status(response.status).json({ error: 'Failed to fetch from Google Maps API!' });
         }
 
         const data = await response.json();
